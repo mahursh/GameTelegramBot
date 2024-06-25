@@ -1,4 +1,4 @@
-package com.mftplus.telegram;
+package com.mftplus.game.telegram;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

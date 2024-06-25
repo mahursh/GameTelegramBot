@@ -9,7 +9,7 @@
 2024-06-24 18:43:27.328 [INFO ] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.24]
 2024-06-24 18:43:27.398 [INFO ] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
 2024-06-24 18:43:27.399 [INFO ] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1242 ms
-2024-06-24 18:43:27.652 [WARN ] com.mftplus.telegram.TabooBot            : TabooBot initialized with username: FirstAttemptBottttttBot
+2024-06-24 18:43:27.652 [WARN ] telegramExecutor.com.mftplus.game.TabooBot            : TabooBot initialized with username: FirstAttemptBottttttBot
 2024-06-24 18:43:27.955 [INFO ] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
 2024-06-24 18:43:27.971 [INFO ] o.a.coyote.http11.Http11NioProtocol      : Starting ProtocolHandler ["http-nio-8080"]
 2024-06-24 18:43:28.000 [INFO ] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path ''
