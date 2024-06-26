@@ -29,7 +29,7 @@ public class BotCommandHandler {
     private String extractCommand(Message message){
         String text = message.getText();
         if (text.startsWith("/")){
-            text.substring(1);
+          return text.substring(1);
         }
         throw new IllegalArgumentException("Could Not Extract A Command From Text : " + text);
     }
