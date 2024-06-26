@@ -33,8 +33,16 @@ public class Game {
     @OneToMany(mappedBy = "game" , cascade = CascadeType.ALL)
     private List<UserGame> users;
 
+    @OneToMany(mappedBy = "game" ,cascade = CascadeType.ALL)
+    private List<GameCard> cards ;
+
     public void addUserGame(UserGame userGame){
         userGame.setGame(this);
         users.add(userGame);
+    }
+
+    public void addGameCard(GameCard gameCard){
+        gameCard.setGame(this);
+        cards.add(gameCard);
     }
 }
