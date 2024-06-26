@@ -31,6 +31,6 @@ public class BotCommandHandler {
         if (text.startsWith("/")){
             text.substring(1);
         }
-        throw new IllegalArgumentException("Could Not Extract A Command From Text : " + message.getText());
+        throw new IllegalArgumentException("Could Not Extract A Command From Text : " + text);
     }
 }
