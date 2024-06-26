@@ -1,4 +1,4 @@
-package com.mftplus.game.configs;
+package com.mftplus.game.entity;
 
 import com.mftplus.game.entity.Chat;
 import com.mftplus.game.entity.User;
@@ -38,7 +38,7 @@ public class WaitRoom {
 
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "wait_room_user" ,
+    @JoinTable(name = "wait_room_user_tbl" ,
             joinColumns = @JoinColumn(name = "wait_room_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
