@@ -1,7 +1,6 @@
 package com.mftplus.game.entity;
 
-import com.mftplus.game.entity.Chat;
-import com.mftplus.game.entity.User;
+
 import com.mftplus.game.enums.WaitRoomStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
