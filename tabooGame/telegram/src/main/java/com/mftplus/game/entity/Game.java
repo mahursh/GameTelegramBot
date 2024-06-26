@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -27,4 +29,12 @@ public class Game {
 
     @ManyToOne
     private  Chat chat ;
+
+    @OneToMany(mappedBy = "game" , cascade = CascadeType.ALL)
+    private List<UserGame> users;
+
+    public void addUserGame(UserGame userGame){
+        userGame.setGame(this);
+        users.add(userGame);
+    }
 }
