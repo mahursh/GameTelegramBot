@@ -2,6 +2,7 @@ package com.mftplus.game.telegramExecutor.command;
 
 import com.mftplus.game.entity.User;
 import com.mftplus.game.service.UserService;
+import com.mftplus.game.telegramExecutor.message.MessageBuilder;
 import com.mftplus.game.telegramExecutor.message.MessageSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,15 +16,15 @@ public class StartCommand implements BotCommand {
 
     private final UserService service;
     private final MessageSender messageSender;
+    private final MessageBuilder messageBuilder;
 
 
     @Override
     public void handle(Message message) {
-        var response = new SendMessage();
-        response.setChatId(message.getChatId());
-        response.setText("Welcome Friend !");
+
         User user = convert(message.getFrom());
-        service.save(user);
+        user = service.save(user);
+        SendMessage response = messageBuilder.buildWelcomeMessage(message.getChatId(), user);
         messageSender.sendMessage(response);
 
     }
@@ -36,8 +37,8 @@ public class StartCommand implements BotCommand {
 
     private User convert(org.telegram.telegrambots.meta.api.objects.User telegramUser) {
         var user = new User();
-        user.setFirstname(telegramUser.getFirstName());
-        user.setLastname(telegramUser.getLastName());
+        user.setFirstName(telegramUser.getFirstName());
+        user.setLastName(telegramUser.getLastName());
         user.setUsername(telegramUser.getUserName());
         user.setTelegramId(telegramUser.getId());
 
