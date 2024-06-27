@@ -52,4 +52,11 @@ public class MessageBuilder {
         message.setChatId(chatId);
         return message;
     }
+
+    public SendMessage buildTextMsg(Long chatId , String text){
+        var message = new SendMessage();
+        message.setChatId(chatId);
+        message.setText(text);
+        return message;
+    }
 }
