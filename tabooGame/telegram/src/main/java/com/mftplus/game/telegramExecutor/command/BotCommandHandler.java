@@ -1,7 +1,10 @@
 package com.mftplus.game.telegramExecutor.command;
 
+import com.mftplus.game.telegramExecutor.message.MessageBuilder;
+import com.mftplus.game.telegramExecutor.message.MessageSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import java.util.List;
@@ -11,6 +14,8 @@ import java.util.List;
 public class BotCommandHandler {
 
     private final List<BotCommand> commands;
+    private final MessageSender messageSender;
+    private final MessageBuilder messageBuilder;
 
     public void handleCommand(Message message){
         BotCommand botCommand =
@@ -20,7 +25,8 @@ public class BotCommandHandler {
                         .orElse(null);
 
         if (botCommand == null){
-            //send a message
+            SendMessage response = messageBuilder.buildCommandNotFoundMsg(message);
+            messageSender.sendMessage(response);
         }else {
             botCommand.handle(message);
         }
