@@ -30,7 +30,8 @@ public class WaitRoom {
 
     private String hash;
 
-    private WaitRoomStatus status;
+    @Enumerated(EnumType.STRING)
+    private WaitRoomStatus status = WaitRoomStatus.AWAITING;
 
     @ManyToOne
     private Chat chat;
