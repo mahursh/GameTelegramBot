@@ -1,10 +1,12 @@
 package com.mftplus.game.telegramExecutor.message;
 
 import com.mftplus.game.entity.User;
+import com.mftplus.game.entity.WaitRoom;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -79,6 +81,31 @@ public class MessageBuilder {
         sendMessage.setChatId(chatId);
         sendMessage.setText(JOIN_GAME_INSTRUCTION);
 
+
+        sendMessage.setReplyMarkup(joinInlineKeyboard(hash));
+        return sendMessage;
+    }
+
+    private String buildJoinToGameLink(String hash){
+        return "https://t.me/%s?start=%s".formatted(username , hash);
+    }
+
+    public EditMessageText editAwaitingMsg(WaitRoom waitRoom){
+        EditMessageText editMessageText = new EditMessageText();
+        String text = JOIN_GAME_INSTRUCTION;
+        if(waitRoom.getUsers().size() > 0){
+            text += "\n\nJoined players:\n";
+            text += addListOfPlayers(waitRoom.getUsers());
+        }
+        editMessageText.setText(text);
+        editMessageText.setParseMode(ParseMode.HTML);
+        editMessageText.setChatId(waitRoom.getChat().getTelegramChatId());
+        editMessageText.setMessageId(waitRoom.getMessageId());
+        editMessageText.setReplyMarkup(joinInlineKeyboard(waitRoom.getHash()));
+        return editMessageText;
+    }
+
+    public InlineKeyboardMarkup joinInlineKeyboard(String hash){
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<InlineKeyboardButton> row1 = new ArrayList<>();
         InlineKeyboardButton button = new InlineKeyboardButton();
@@ -87,11 +114,15 @@ public class MessageBuilder {
         button.setUrl(buildJoinToGameLink(hash));
         row1.add(button);
         inlineKeyboardMarkup.setKeyboard(List.of(row1));
-        sendMessage.setReplyMarkup(inlineKeyboardMarkup);
-        return sendMessage;
+        return inlineKeyboardMarkup;
     }
 
-    private String buildJoinToGameLink(String hash){
-        return "https://t.me/%s?start=%s".formatted(username , hash);
+    private String addListOfPlayers(List<User> users){
+        var textBuilder = new StringBuilder();
+        for (int i = 0 ; i < users.size() ; i++){
+            User user = users.get(i);
+            textBuilder.append("%d. <a href=\"tg://user?id=%d\">%s</a>\n".formatted(i + 1 , user.getTelegramId() ,user.getFirstName()));
+        }
+        return textBuilder.toString();
     }
 }

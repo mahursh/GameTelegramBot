@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.DefaultAbsSender;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @Component
@@ -14,7 +15,7 @@ public class MessageSender extends DefaultAbsSender {
     }
 
     @SneakyThrows
-    public Object sendMessage(SendMessage message){
+    public Object sendMessage(BotApiMethod<?> message){
         return execute(message);
     }
 }

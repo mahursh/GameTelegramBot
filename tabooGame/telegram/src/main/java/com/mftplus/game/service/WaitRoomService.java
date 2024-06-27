@@ -23,11 +23,12 @@ public class WaitRoomService {
 
 
 
-    public WaitRoom save(Long telegramChatId , String hash){
+    public WaitRoom save(Long telegramChatId , String hash ,Integer messageId){
         var waitRoom = new WaitRoom();
         Chat chat = chatRepository.findByTelegramChatId(telegramChatId);
         waitRoom.setChat(chat);
         waitRoom.setHash(hash);
+        waitRoom.setMessageId(messageId);
         return waitRoomRepository.save(waitRoom);
     }
 

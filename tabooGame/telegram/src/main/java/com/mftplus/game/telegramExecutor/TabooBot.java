@@ -8,6 +8,7 @@ import com.mftplus.game.telegramExecutor.command.BotCommandHandler;
 import com.mftplus.game.telegramExecutor.message.MessageBuilder;
 import com.mftplus.game.telegramExecutor.message.MessageSender;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -59,6 +60,7 @@ public class TabooBot extends TelegramLongPollingBot {
 
 //________________________________________________________________________________________
 
+    @SneakyThrows //we can remove it , if we use sendMessage method that is inside  MessageSender class.
     @Override
     public void onUpdateReceived(Update update) {
         Thread.currentThread().setName("Telegram");
@@ -76,7 +78,8 @@ public class TabooBot extends TelegramLongPollingBot {
             chat = chatService.save(chat);
             if(chat.getChatBotStatus() == ChatBotStatus.ADMIN){
                SendMessage message =  messageBuilder.buildTextMsg(chat.getTelegramChatId() , "Hello there!\nLet's play the taboo game");
-                messageSender.sendMessage(message);
+//                messageSender.sendMessage(message);
+                execute(message);
             }
         }
 
