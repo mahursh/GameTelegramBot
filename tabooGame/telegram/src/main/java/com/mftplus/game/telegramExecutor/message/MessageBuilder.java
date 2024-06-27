@@ -69,6 +69,7 @@ public class MessageBuilder {
         var message = new SendMessage();
         message.setChatId(chatId);
         message.setText(text);
+        message.setParseMode(ParseMode.HTML);
         return message;
     }
 

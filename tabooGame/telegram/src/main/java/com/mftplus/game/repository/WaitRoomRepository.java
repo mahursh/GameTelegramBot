@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface WaitRoomRepository extends JpaRepository<WaitRoom , Long> {
+
+    WaitRoom findByHash(String hash);
 }

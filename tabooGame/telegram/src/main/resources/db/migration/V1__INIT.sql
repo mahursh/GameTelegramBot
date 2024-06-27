@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS card_entity_all_taboos
 (
     card_entity_id BIGINT NOT NULL REFERENCES card_tbl (id),
     all_taboos VARCHAR NOT NULL
-    );
+);
 
 CREATE TABLE IF NOT EXISTS game_card_tbl
 (
