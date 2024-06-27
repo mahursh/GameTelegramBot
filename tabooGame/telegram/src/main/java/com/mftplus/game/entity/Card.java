@@ -31,10 +31,15 @@ public class Card {
     private String answer;
 
     //@Type(type = "list-array")
+    //TODO: Write The Query For Collection Table.
     @ElementCollection
+    @CollectionTable(name = "card_entity_taboos", joinColumns = @JoinColumn(name = "card_entity_id"))
+//    @Column(name = "taboo")
     private List<String> taboos;
 
     //@Type(type = "list-array")
     @ElementCollection
+    @CollectionTable(name = "card_entity_all_taboos", joinColumns = @JoinColumn(name = "card_entity_id"))
+//    @Column(name = "all_taboo")
     private List<String> allTaboos;
 }
