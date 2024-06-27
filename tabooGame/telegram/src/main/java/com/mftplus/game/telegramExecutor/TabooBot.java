@@ -68,6 +68,7 @@ public class TabooBot extends TelegramLongPollingBot {
             String text = message.getText();
             if (text == null) return;
             if(text.startsWith("/")){
+                logger.info("Bot receives the command: {}" , text );
                 commandHandler.handleCommand(message);
             }
         }else if(update.hasMyChatMember()){

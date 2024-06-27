@@ -6,12 +6,18 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Component
 public class MessageBuilder {
     @Value("${app.telegram.username}")
     private String username;
+    private static final String JOIN_GAME_INSTRUCTION = "To join the game press the \"start\" command\nwithin a private chat with the bot.\n\nThe game starts in two minutes";
 
     public SendMessage buildWelcomeMessage(Long chatId , User user){
         SendMessage message = new SendMessage();
@@ -64,5 +70,26 @@ public class MessageBuilder {
         message.setChatId(chatId);
         message.setText(text);
         return message;
+    }
+
+    public SendMessage buildAwaitingMsg(Long chatId , String hash){
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(chatId);
+        sendMessage.setText(JOIN_GAME_INSTRUCTION);
+
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<InlineKeyboardButton> row1 = new ArrayList<>();
+        InlineKeyboardButton button = new InlineKeyboardButton();
+
+        button.setText("Join the game");
+        button.setUrl(buildJoinToGameLink(hash));
+        row1.add(button);
+        inlineKeyboardMarkup.setKeyboard(List.of(row1));
+        sendMessage.setReplyMarkup(inlineKeyboardMarkup);
+        return sendMessage;
+    }
+
+    private String buildJoinToGameLink(String hash){
+        return "https://t.me/%s?start=%s".formatted(username , hash);
     }
 }
