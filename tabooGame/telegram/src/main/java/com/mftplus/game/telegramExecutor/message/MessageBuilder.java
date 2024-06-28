@@ -125,4 +125,15 @@ public class MessageBuilder {
         }
         return textBuilder.toString();
     }
+
+    public EditMessageText editNotEnoughUserMsg(Integer messageId , Long telegramChatId){
+        EditMessageText editMessageText = new EditMessageText();
+        editMessageText.setMessageId(messageId);
+        editMessageText.setChatId(telegramChatId);
+        editMessageText.setParseMode(ParseMode.HTML);
+        String txt = "Not Enough User ⚠";
+        txt += "\nThe minimum number of players is <b>2</b>";
+        editMessageText.setText(txt);
+        return editMessageText;
+    }
 }
