@@ -3,6 +3,7 @@ package com.mftplus.game.service;
 import com.mftplus.game.entity.Chat;
 import com.mftplus.game.entity.User;
 import com.mftplus.game.entity.WaitRoom;
+import com.mftplus.game.enums.WaitRoomStatus;
 import com.mftplus.game.repository.ChatRepository;
 import com.mftplus.game.repository.UserRepository;
 import com.mftplus.game.repository.WaitRoomRepository;
@@ -45,5 +46,9 @@ public class WaitRoomService {
         User user = userRepository.findByTelegramId(telegramId);
         waitRoom.getUsers().add(user);
         return waitRoom;
+    }
+
+    public WaitRoom findAwaitingByChatId(Long telegramChatId){
+        return waitRoomRepository.findByChat_telegramChatIdAndStatus(telegramChatId , WaitRoomStatus.AWAITING);
     }
 }
