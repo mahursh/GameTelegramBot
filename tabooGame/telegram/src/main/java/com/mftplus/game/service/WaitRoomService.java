@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-@Slf4j
 public class WaitRoomService {
 
     private final WaitRoomRepository waitRoomRepository ;
