@@ -37,7 +37,6 @@ public class RegistrationFinishExecution {
     @Autowired
     private RegistrationFinishExecution self;
 
-
     /*
     Self Injection Approach:
 
