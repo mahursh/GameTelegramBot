@@ -1,5 +1,6 @@
 package com.mftplus.game.telegramExecutor.message;
 
+import com.mftplus.game.entity.Card;
 import com.mftplus.game.entity.User;
 import com.mftplus.game.entity.WaitRoom;
 import org.springframework.beans.factory.annotation.Value;
@@ -135,5 +136,46 @@ public class MessageBuilder {
         txt += "\nThe minimum number of players is <b>2</b>";
         editMessageText.setText(txt);
         return editMessageText;
+    }
+
+    public SendMessage buildNextTurnMsg(Long chatId , User explainer , Long cardId){
+        SendMessage message = new SendMessage();
+        String text = """
+                \uD83D\uDD04 It's now the turn of <a href="tg://user?id=%s">%s</a> to explain
+                """.formatted(explainer.getTelegramId() , explainer.getFirstName());
+
+        message.setText(text);
+        message.setChatId(chatId);
+        message.setParseMode(ParseMode.HTML);
+
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<InlineKeyboardButton> row1 = new ArrayList<>();
+        InlineKeyboardButton button = new InlineKeyboardButton();
+        button.setText("Explain The Card #" + cardId);
+        button.setUrl("https://t.me/" +username);
+
+        row1.add(button);
+        inlineKeyboardMarkup.setKeyboard(List.of(row1));
+        message.setReplyMarkup(inlineKeyboardMarkup);
+        return message;
+    }
+
+
+    public SendMessage buildCardMsg(Long chatId , Card card){
+        var sendMessage = new SendMessage();
+        String txt =  "#" +card.getId() +"\n";
+
+        txt += "\n\uD83D\uDDE3 <b>%s</b>\n\n".formatted(card.getAnswer().toUpperCase());
+
+        for (String taboo : card.getTaboos()){
+            txt += "\uD83D\uDEAB  %s\n".formatted(taboo.toUpperCase());
+        }
+
+        txt += "\n";
+
+        sendMessage.setParseMode(ParseMode.HTML);
+        sendMessage.setChatId(chatId);
+        sendMessage.setText(txt);
+        return sendMessage;
     }
 }
