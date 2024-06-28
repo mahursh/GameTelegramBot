@@ -4,9 +4,12 @@ import com.mftplus.game.entity.User;
 import com.mftplus.game.entity.WaitRoom;
 import com.mftplus.game.service.UserService;
 import com.mftplus.game.service.WaitRoomService;
+import com.mftplus.game.telegramExecutor.TabooBot;
 import com.mftplus.game.telegramExecutor.message.MessageBuilder;
 import com.mftplus.game.telegramExecutor.message.MessageSender;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -22,24 +25,32 @@ public class StartCommand implements BotCommand {
     private final MessageBuilder messageBuilder;
     private final WaitRoomService waitRoomService;
 
-
+    private static final Logger logger = LoggerFactory.getLogger(TabooBot.class);
     @Override
     public void handle(Message message) {
 
         Long chatId = message.getChatId();
         User user = convert(message.getFrom());
         user = userService.save(user);
+        logger.warn(user +" : user saved - StartCommand");
         String hash = extractHash(message.getText());
        if (hash != null){
            WaitRoom waitRoom = waitRoomService.join(hash , message.getFrom().getId());
-           EditMessageText editWaitingRoomMsg = messageBuilder.editAwaitingMsg(waitRoom);
-           messageSender.sendMessage(editWaitingRoomMsg);
+           logger.warn(waitRoom + "  : waitRoom Join - StartCommand ");
+           EditMessageText editWaitRoomMsg = messageBuilder.editAwaitingMsg(waitRoom);
+           messageSender.sendMessage(editWaitRoomMsg);
+           logger.warn("after sendMessage - StartCommand");
+
            String txt = "You've joined the game in the <b>%s</b> group".formatted(waitRoom.getChat().getTitle());
            SendMessage joinMessage = messageBuilder.buildTextMsg(chatId, txt);
            messageSender.sendMessage(joinMessage);
+           logger.warn("after joinMessage - StartCommand");
+
 
        }else{
-           SendMessage response = messageBuilder.buildWelcomeMessage(message.getChatId(), user);
+//           SendMessage response = messageBuilder.buildWelcomeMessage(message.getChatId(), user);
+           logger.error("else part of handle() inside StartCommand");
+           SendMessage response = messageBuilder.buildWelcomeMessage(chatId, user);
            messageSender.sendMessage(response);
        }
 

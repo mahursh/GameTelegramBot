@@ -34,6 +34,7 @@ public class WaitRoom {
     private WaitRoomStatus status = WaitRoomStatus.AWAITING;
 
     @ManyToOne
+    @JoinColumn(name = "chat_id")
     private Chat chat;
 
 

@@ -76,9 +76,9 @@ public class TabooBot extends TelegramLongPollingBot {
         }else if(update.hasMyChatMember()){
             Chat chat = chatService.convert(update.getMyChatMember());
             chat = chatService.save(chat);
-            if(chat.getChatBotStatus() == ChatBotStatus.ADMIN){
-               SendMessage message =  messageBuilder.buildTextMsg(chat.getTelegramChatId() , "Hello there!\nLet's play the taboo game");
-//                messageSender.sendMessage(message);
+            logger.warn(chat +" :  chat -- saved inside TabooBot");
+            if (chat.getChatBotStatus() == ChatBotStatus.ADMIN) {
+                SendMessage message = messageBuilder.buildTextMsg(chat.getTelegramChatId(), "Hello there!\nLet's play the taboo game");
                 execute(message);
             }
         }

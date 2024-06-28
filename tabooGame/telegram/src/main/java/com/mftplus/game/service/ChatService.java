@@ -17,11 +17,11 @@ public class ChatService {
 
     public Chat save (Chat chat){
         Chat existedChat = repository.findByTelegramChatId(chat.getTelegramChatId());
-        if (existedChat == null){
+        if (existedChat == null) {
             return repository.save(chat);
-        }else {
+        } else {
             existedChat.setChatBotStatus(chat.getChatBotStatus());
-            return  repository.save(existedChat);
+            return repository.save(existedChat);
         }
     }
 
@@ -33,7 +33,6 @@ public class ChatService {
         ChatMember newChatMember = chatMemberUpdated.getNewChatMember();
         if (newChatMember != null) {
             chat.setChatBotStatus(convertStatus(newChatMember.getStatus()));
-
         }
         return chat;
     }
@@ -42,7 +41,7 @@ public class ChatService {
         return switch (status) {
             case "administrator" -> ChatBotStatus.ADMIN;
             case "kicked" -> ChatBotStatus.KICKED;
-            default -> ChatBotStatus.MEMBER;
+            default ->  ChatBotStatus.MEMBER;
         };
     }
 }
