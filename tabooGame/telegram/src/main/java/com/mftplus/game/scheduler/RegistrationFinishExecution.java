@@ -37,6 +37,21 @@ public class RegistrationFinishExecution {
     @Autowired
     private RegistrationFinishExecution self;
 
+
+    /*
+    Self Injection Approach:
+
+    this self will not be injected during bean initialization ,
+    it will cause circular dependency .
+    instead we will inject this dependency  ,once we need it . to
+    tell spring about it,  we will apply @Lazy  annotation .
+    now we will call the registrationFinished() methode inside  scheduleRegistrationFinish constructor
+    using self.registrationFinished() .
+    and note that the registrationFinished() method must be public.
+    in this way spring proxy will be aware of method call and create the transaction before executing method
+    */
+
+
     public void scheduleRegistrationFinish(Long telegramId){
 
         taskScheduler.schedule(
@@ -49,7 +64,7 @@ public class RegistrationFinishExecution {
 
     public void registrationFinished(Long telegramChatId){
 
-        WaitRoom waitRoom = waitRoomService.findAwaitingByChatId(telegramChatId);
+        WaitRoom waitRoom = waitRoomService.findAwaitingByChatId(telegramChatId); //This part is the reason we put @Transactional upon the class.
 
         if (waitRoom == null) return;
 
