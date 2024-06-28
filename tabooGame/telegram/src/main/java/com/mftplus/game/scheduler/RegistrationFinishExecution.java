@@ -57,6 +57,7 @@ public class RegistrationFinishExecution {
             EditMessageText notEnoughUserMsg = messageBuilder.editNotEnoughUserMsg(waitRoom.getMessageId() , telegramChatId);
             messageSender.sendMessage(notEnoughUserMsg);
         }else {
+            //TODO: Test It With Two Accounts.
             SendMessage gameStartedMsg = messageBuilder.buildTextMsg(telegramChatId , "The Game Has Started!");
             messageSender.sendMessage(gameStartedMsg);
         }
