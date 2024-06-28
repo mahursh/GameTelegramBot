@@ -1,17 +1,24 @@
 package com.mftplus.game.service;
 
 import com.mftplus.game.entity.Card;
+import com.mftplus.game.entity.Game;
+import com.mftplus.game.entity.GameCard;
 import com.mftplus.game.repository.CardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CardService {
-    private final CardRepository repository;
+    private final static Random NEXT_CARD_ID = new Random();
+
+    private final CardRepository cardRepository;
     private final WordService wordService;
 
     public Card save (List<String> answerAndTaboos){
@@ -26,10 +33,31 @@ public class CardService {
                         .toList()
         );
 
-        return repository.save(card);
+        return cardRepository.save(card);
     }
 
     public boolean isTableEmpty(){
-        return repository.count() == 0;
+        return cardRepository.count() == 0;
+    }
+
+    public Card getNextCard(Game game){
+
+        Set<Long> usedCardIds = getCardIds(game);
+        List<Long> allIds = cardRepository.getAllIds();
+        Long nextCardId;
+        do {
+            int index = NEXT_CARD_ID.nextInt(allIds.size());
+            nextCardId = allIds.get(index);
+        }while (usedCardIds.contains(nextCardId));
+
+        return cardRepository.findById(nextCardId).get();
+    }
+
+    private Set<Long> getCardIds(Game game){
+        return game.getCards()
+                .stream()
+                .map(GameCard :: getCard)
+                .map(Card :: getId)
+                .collect(Collectors.toSet());
     }
 }
