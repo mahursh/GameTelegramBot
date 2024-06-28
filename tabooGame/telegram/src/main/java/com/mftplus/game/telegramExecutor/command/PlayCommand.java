@@ -1,5 +1,6 @@
 package com.mftplus.game.telegramExecutor.command;
 
+import com.mftplus.game.scheduler.RegistrationFinishExecution;
 import com.mftplus.game.service.WaitRoomService;
 import com.mftplus.game.telegramExecutor.message.MessageBuilder;
 import com.mftplus.game.telegramExecutor.message.MessageSender;
@@ -19,6 +20,7 @@ public class PlayCommand implements BotCommand{
     private final MessageBuilder messageBuilder;
     private final MessageSender messageSender;
     private final WaitRoomService waitRoomService;
+    private final RegistrationFinishExecution registrationFinishExecution;
 
     @Override
     public void handle(Message message) {
@@ -33,7 +35,9 @@ public class PlayCommand implements BotCommand{
             Object sendMessage = messageSender.sendMessage(awaitingMsg);
             Integer messageId = extractMessageId(sendMessage);
             waitRoomService.save(chatId , hash ,messageId);
+            registrationFinishExecution.scheduleRegistrationFinish(chatId);
         }
+
     }
 
     @Override
