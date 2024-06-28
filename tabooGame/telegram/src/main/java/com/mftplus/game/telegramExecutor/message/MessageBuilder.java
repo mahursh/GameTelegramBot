@@ -59,8 +59,7 @@ public class MessageBuilder {
                 
                 If any of the Guessers correctly guess a word, both the Explainer and Guesser earn a score\uD83C\uDFAF
                 
-                The Explainer role changes every five minutes ⌛, and the game continues until everyone has taken a turn explaining.       
-                """;
+                The Explainer role changes every five minutes ⌛, and the game continues until everyone has taken a turn explaining .""";
 
         message.setText(txt);
         message.setChatId(chatId);
@@ -93,7 +92,8 @@ public class MessageBuilder {
     public EditMessageText editAwaitingMsg(WaitRoom waitRoom){
         EditMessageText editMessageText = new EditMessageText();
         String text = JOIN_GAME_INSTRUCTION;
-        if(waitRoom.getUsers().size() > 0){
+//        if(waitRoom.getUsers().size() > 0){
+        if(!waitRoom.getUsers().isEmpty()){
             text += "\n\nJoined players:\n";
             text += addListOfPlayers(waitRoom.getUsers());
         }

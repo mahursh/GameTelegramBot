@@ -32,24 +32,19 @@ public class StartCommand implements BotCommand {
         Long chatId = message.getChatId();
         User user = convert(message.getFrom());
         user = userService.save(user);
-        logger.warn(user +" : user saved - StartCommand");
         String hash = extractHash(message.getText());
        if (hash != null){
            WaitRoom waitRoom = waitRoomService.join(hash , message.getFrom().getId());
-           logger.warn(waitRoom + "  : waitRoom Join - StartCommand ");
            EditMessageText editWaitRoomMsg = messageBuilder.editAwaitingMsg(waitRoom);
            messageSender.sendMessage(editWaitRoomMsg);
-           logger.warn("after sendMessage - StartCommand");
 
            String txt = "You've joined the game in the <b>%s</b> group".formatted(waitRoom.getChat().getTitle());
            SendMessage joinMessage = messageBuilder.buildTextMsg(chatId, txt);
            messageSender.sendMessage(joinMessage);
-           logger.warn("after joinMessage - StartCommand");
 
 
        }else{
-//           SendMessage response = messageBuilder.buildWelcomeMessage(message.getChatId(), user);
-           logger.error("else part of handle() inside StartCommand");
+
            SendMessage response = messageBuilder.buildWelcomeMessage(chatId, user);
            messageSender.sendMessage(response);
        }

@@ -2,8 +2,11 @@ package com.mftplus.game.runner;
 
 import com.mftplus.game.entity.Word;
 import com.mftplus.game.service.WordService;
+import com.mftplus.game.telegramExecutor.TabooBot;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
@@ -18,9 +21,9 @@ import java.io.InputStreamReader;
 @Order(1)
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class DictionaryRunner implements ApplicationRunner {
     private final WordService service;
+    private static final Logger logger = LoggerFactory.getLogger(TabooBot.class);
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -33,7 +36,7 @@ public class DictionaryRunner implements ApplicationRunner {
                 }
 
             }catch (IOException e){
-                log.error("Error Reading File: " + e.getMessage());
+                logger.error("Error Reading File: " + e.getMessage());
             }
 
 

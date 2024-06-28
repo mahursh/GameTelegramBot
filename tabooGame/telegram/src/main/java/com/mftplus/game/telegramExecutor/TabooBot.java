@@ -29,7 +29,6 @@ public class TabooBot extends TelegramLongPollingBot {
     private final BotCommandHandler commandHandler;
     private final ChatService chatService;
     private final MessageBuilder messageBuilder;
-    private final MessageSender messageSender;
 
 //________________________________________________________________________________________
 
@@ -37,15 +36,13 @@ public class TabooBot extends TelegramLongPollingBot {
                     @Value("${app.telegram.token}") String botToken,
                     BotCommandHandler commandHandler,
                     ChatService chatService,
-                    MessageBuilder messageBuilder,
-                    MessageSender messageSender
+                    MessageBuilder messageBuilder
                   ) {
         super(botToken);
         this.username = username;
         this.commandHandler = commandHandler;
         this.chatService = chatService;
         this.messageBuilder = messageBuilder;
-        this.messageSender = messageSender;
 
         logger.warn("TabooBot initialized with username: {}", username);
         logger.warn("TabooBot initialized with token: {}", botToken);
@@ -60,7 +57,7 @@ public class TabooBot extends TelegramLongPollingBot {
 
 //________________________________________________________________________________________
 
-    @SneakyThrows //we can remove it , if we use sendMessage method that is inside  MessageSender class.
+    @SneakyThrows
     @Override
     public void onUpdateReceived(Update update) {
         Thread.currentThread().setName("Telegram");
@@ -76,7 +73,6 @@ public class TabooBot extends TelegramLongPollingBot {
         }else if(update.hasMyChatMember()){
             Chat chat = chatService.convert(update.getMyChatMember());
             chat = chatService.save(chat);
-            logger.warn(chat +" :  chat -- saved inside TabooBot");
             if (chat.getChatBotStatus() == ChatBotStatus.ADMIN) {
                 SendMessage message = messageBuilder.buildTextMsg(chat.getTelegramChatId(), "Hello there!\nLet's play the taboo game");
                 execute(message);

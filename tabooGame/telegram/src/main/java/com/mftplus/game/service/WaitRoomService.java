@@ -32,8 +32,6 @@ public class WaitRoomService {
         var waitRoom = new WaitRoom();
 
         Chat chat = chatRepository.findByTelegramChatId(telegramChatId);
-         logger.warn(chat +"-----> Chat Found - WaitRoomService");
-         logger.warn(telegramChatId +"-----> TelegramChatId - WaitRoomService");
         waitRoom.setChat(chat);
         waitRoom.setHash(hash);
         waitRoom.setMessageId(messageId);
