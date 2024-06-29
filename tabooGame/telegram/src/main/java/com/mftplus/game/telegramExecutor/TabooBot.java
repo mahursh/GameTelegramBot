@@ -7,6 +7,7 @@ import com.mftplus.game.service.ChatService;
 import com.mftplus.game.telegramExecutor.command.BotCommandHandler;
 import com.mftplus.game.telegramExecutor.message.MessageBuilder;
 import com.mftplus.game.telegramExecutor.message.MessageSender;
+import com.mftplus.game.telegramExecutor.message.UserMessageHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,20 +30,25 @@ public class TabooBot extends TelegramLongPollingBot {
     private final BotCommandHandler commandHandler;
     private final ChatService chatService;
     private final MessageBuilder messageBuilder;
+    private final UserMessageHandler userMessageHandler;
 
 //________________________________________________________________________________________
+
+//TODO: i think we could put @Value upon username and token field and then put @RequiredArgsConstructor And remove the actual constructor .
 
     public TabooBot(@Value("${app.telegram.username}") String username,
                     @Value("${app.telegram.token}") String botToken,
                     BotCommandHandler commandHandler,
                     ChatService chatService,
-                    MessageBuilder messageBuilder
+                    MessageBuilder messageBuilder,
+                    UserMessageHandler userMessageHandler
                   ) {
         super(botToken);
         this.username = username;
         this.commandHandler = commandHandler;
         this.chatService = chatService;
         this.messageBuilder = messageBuilder;
+        this.userMessageHandler =userMessageHandler;
 
         logger.warn("TabooBot initialized with username: {}", username);
         logger.warn("TabooBot initialized with token: {}", botToken);
@@ -69,6 +75,8 @@ public class TabooBot extends TelegramLongPollingBot {
             if(text.startsWith("/")){
                 logger.info("Bot receives the command: {}" , text );
                 commandHandler.handleCommand(message);
+            }else {
+                userMessageHandler.handle(message);
             }
         }else if(update.hasMyChatMember()){
             Chat chat = chatService.convert(update.getMyChatMember());
