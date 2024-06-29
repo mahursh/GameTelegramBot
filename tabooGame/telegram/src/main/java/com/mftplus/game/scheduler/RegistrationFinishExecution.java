@@ -79,7 +79,7 @@ public class RegistrationFinishExecution {
 
             Game game = gameService.save(waitRoom);
             Card nextCard = gameService.getNextCard(game);
-            User explainer = getExplainer(game);
+            User explainer = gameService.getExplainer(game);
             SendMessage nextTurnMsg = messageBuilder.buildNextTurnMsg(telegramChatId , explainer , nextCard.getId());
             SendMessage cardMsg = messageBuilder.buildCardMsg(explainer.getTelegramId() , nextCard);
             messageSender.sendMessage(nextTurnMsg);
@@ -91,12 +91,5 @@ public class RegistrationFinishExecution {
 
     }
 
-    public User getExplainer(Game game){
-        return game.getUsers()
-                .stream()
-                .filter(ug -> ug.getGameRole() == GameRole.EXPLAINER)
-                .findFirst()
-                .map(UserGame::getUser)
-                .orElseThrow();
-    }
+
 }
