@@ -33,6 +33,7 @@ public class RegistrationFinishExecution {
     private final MessageBuilder messageBuilder;
     private final MessageSender messageSender;
     private final GameService gameService;
+    private final TimeIsUpExecution timeIsUpExecution;
     private static final Logger logger = LoggerFactory.getLogger(TabooBot.class);
 
    //TODO: remove @Autowired .
@@ -78,12 +79,9 @@ public class RegistrationFinishExecution {
 
 
             Game game = gameService.save(waitRoom);
-            Card nextCard = gameService.getNextCard(game);
-            User explainer = gameService.getExplainer(game);
-            SendMessage nextTurnMsg = messageBuilder.buildNextTurnMsg(telegramChatId , explainer , nextCard.getId());
-            SendMessage cardMsg = messageBuilder.buildCardMsg(explainer.getTelegramId() , nextCard);
-            messageSender.sendMessage(nextTurnMsg);
-            messageSender.sendMessage(cardMsg);
+            messageSender.sendNextTurnMsg(telegramChatId, game);
+            timeIsUpExecution.scheduleTimeIsUp(telegramChatId);
+
 
         }
 

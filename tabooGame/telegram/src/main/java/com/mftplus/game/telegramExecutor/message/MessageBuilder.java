@@ -1,8 +1,6 @@
 package com.mftplus.game.telegramExecutor.message;
 
-import com.mftplus.game.entity.Card;
-import com.mftplus.game.entity.User;
-import com.mftplus.game.entity.WaitRoom;
+import com.mftplus.game.entity.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
@@ -13,6 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -208,6 +207,26 @@ public class MessageBuilder {
         message.setParseMode(ParseMode.HTML);
         message.setReplyMarkup(explainInlineKeyboardMarkup(cardId));
         return message;
+
+    }
+
+    public SendMessage buildGameResultMsg(Long telegramChatId, Game game) {
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setChatId(telegramChatId);
+        sendMessage.setParseMode(ParseMode.HTML);
+        String txt = "GAME OVER !\nThe result of game:\n";
+
+        List<UserGame> players = game.getUsers()
+                        .stream()
+                                .sorted(Comparator.comparing(UserGame :: getScore))
+                .toList();
+        for (int i = 0 ; i <players.size(); i++){
+            UserGame userGame = players.get(players.size() - 1 - i);
+            txt += "%d . \uD83C\uDFAF <b>%d</b> %s\n".formatted(i + 1 , userGame.getScore() , userGame.getUser().getFirstName());
+        }
+
+        sendMessage.setText(txt);
+        return sendMessage;
 
     }
 }

@@ -123,4 +123,14 @@ public class GameService {
                 .map(UserGame::getUser)
                 .orElseThrow();
     }
+
+    public Game timeIsUp(Long telegramChatId) {
+        Game game = findGameInProgress(telegramChatId);
+        GameCard gameCard = getGameCardInProgress(game);
+        gameCard.setStatus(CardStatus.TIME_IS_UP);
+        UserGame userGame = getUserGameExplainer(game);
+        userGame.setGameRole(GameRole.GUESSER);
+        userGame.setExplained(true);
+        return game;
+    }
 }
