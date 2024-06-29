@@ -29,5 +29,5 @@ public class GameCard {
     private Game game;
 
     @Enumerated(EnumType.STRING)
-    private CardStatus cardStatus = CardStatus.IN_PROGRESS;
+    private CardStatus status = CardStatus.IN_PROGRESS;
 }
